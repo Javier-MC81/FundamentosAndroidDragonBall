@@ -11,7 +11,7 @@ import com.jmoreno.dragonballandroid.databinding.ActivityMainBinding
 import com.jmoreno.dragonballandroid.databinding.ActivitySecondBinding
 import kotlinx.coroutines.launch
 
-class SecondActivity : AppCompatActivity(), PersonajeClicked {
+class SecondActivity : AppCompatActivity(),PersonajeClicked{
 
     private lateinit var binding : ActivitySecondBinding
     companion object {

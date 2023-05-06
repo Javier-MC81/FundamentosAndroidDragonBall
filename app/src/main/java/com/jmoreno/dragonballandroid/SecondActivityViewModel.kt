@@ -13,16 +13,15 @@ import okhttp3.Request
 
 class SecondActivityViewModel: ViewModel() {
 
-    private val _uiState = MutableStateFlow<SecondActivityViewModel.UiState>(SecondActivityViewModel.UiState.Idle)
-    val uiState : StateFlow<SecondActivityViewModel.UiState> = _uiState
+    private val _uiListState = MutableStateFlow<SecondActivityViewModel.UiListState>(SecondActivityViewModel.UiListState.Idle)
+    val uiListState : StateFlow<SecondActivityViewModel.UiListState> = _uiListState
     var listaPersonajes: List<Personaje> = listOf()
 
-
-    private val _detailState = MutableStateFlow<SecondActivityViewModel.UiState>(SecondActivityViewModel.UiState.Idle)
-    var detailState: StateFlow<SecondActivityViewModel.UiState> = _detailState
-
     fun changeDetail(personaje: Personaje) {
-        _detailState.value = UiState.OnHeroReceived(personaje)
+        _uiListState.value = UiListState.OnHeroReceived(personaje)
+    }
+    fun showList() {
+        _uiListState.value = UiListState.OnListReceived(listaPersonajes)
     }
 
     fun downloadListOfHeroes(token: String) {
@@ -46,21 +45,25 @@ class SecondActivityViewModel: ViewModel() {
                     val personajeDtoArray = gson.fromJson(responseBody.string(), Array<PersonajeDTO>::class.java)
                     //_uiState.value = UiState.OnListReceived(personajeDtoArray.toList().map { PersonajeDTO(it.favorite,it.name,it.id,it.photo,it.description) })
                     listaPersonajes = personajeDtoArray.toList().map { Personaje(it.favorite,it.name,it.id,it.photo,it.description, vidaMaxima = 100, vidaActual = 100) }
-                    _uiState.value = UiState.OnListReceived(listaPersonajes)
+                    _uiListState.value = UiListState.OnListReceived(listaPersonajes)
                 } catch(ex: Exception ) {
-                    _uiState.value = UiState.Error("Something went wrong in the response")
+                    _uiListState.value = UiListState.Error("Something went wrong in the response")
                 }
-            } ?: run { _uiState.value = UiState.Error("Something went wrong in the request") }
+            } ?: run { _uiListState.value = UiListState.Error("Something went wrong in the request") }
         }
     }
-    sealed class UiState {
-        object Idle : UiState()
-        object Empty: UiState()
-        data class Error(val error: String) : UiState()
-        data class OnListReceived(val heroeList: List<Personaje>) : UiState()
-        data class OnHeroReceived(val personaje: Personaje): UiState()
-
-
+    sealed class UiListState {
+        object Idle : UiListState()
+        object Empty: UiListState()
+        data class Error(val error: String) : UiListState()
+        data class OnListReceived(val heroeList: List<Personaje>) : UiListState()
+        data class OnHeroReceived(val personaje: Personaje): UiListState()
     }
 
+
+    sealed class UiHeroState {
+        object Idle : UiHeroState()
+
+        data class OnHeroReceived(val personaje: Personaje): UiHeroState()
+    }
 }

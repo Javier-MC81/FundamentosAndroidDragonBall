@@ -11,15 +11,18 @@ import com.squareup.picasso.Picasso
 interface PersonajeClicked {
     fun personajeClicked(personaje: Personaje)
 }
-
+interface OnClicked {
+    fun showHero(personaje: Personaje)
+}
 
 class ListHeroesAdapter(
     private val listaPersonajes: List<Personaje>,
-    private val callback: PersonajeClicked
+    private val callback: PersonajeClicked,
+    private val fragParent: OnClicked
 ): RecyclerView.Adapter<ListHeroesAdapter.MainActivityViewHolder>() {
 
 
-    class MainActivityViewHolder(private var item: ItemPersonajeBinding,private val callback: PersonajeClicked) : RecyclerView.ViewHolder(item.root) {
+    class MainActivityViewHolder(private var item: ItemPersonajeBinding,private val callback: PersonajeClicked,private val fragParent: OnClicked) : RecyclerView.ViewHolder(item.root) {
 
         fun showPersonaje(personaje: Personaje) {
 
@@ -27,12 +30,24 @@ class ListHeroesAdapter(
                 .into(item.ivPersonaje)
             item.tvName.text = personaje.name
             item.tvNumeroVida.text = personaje.vidaActual.toString()
-
-            item.bLuchar.setOnClickListener {
-                Toast.makeText(item.root.context, "Pulsado sobre ${personaje.name}", Toast.LENGTH_LONG).show()
-                callback.personajeClicked(personaje)
+            if(personaje.vidaActual != 0){
+                    item.bLuchar.isEnabled = true
+            }else {
+                item.bLuchar.isEnabled = false
+                item.bLuchar.text = "Personaje Eliminado"
             }
+            if (item.bLuchar.isEnabled){
+                item.bLuchar.setOnClickListener {
 
+                    fragParent.showHero(personaje)
+
+                }
+            }else {
+                item.ipBackground.setOnClickListener {
+                    Toast.makeText(item.root.context, "Lo sentimos. ${personaje.name} ha perdido todas sus batallas", Toast.LENGTH_LONG).show()
+                }
+
+            }
         }
 
     }
@@ -43,7 +58,7 @@ class ListHeroesAdapter(
             parent,
             false
         )
-        return MainActivityViewHolder(binding, callback)
+        return MainActivityViewHolder(binding, callback,fragParent)
     }
 
     override fun getItemCount(): Int {

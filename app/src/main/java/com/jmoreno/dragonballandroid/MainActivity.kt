@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                     when (it){
                         is ViewModelMainActivity.UiState.OnTokenReceived ->
                             startActivity(SecondActivity().getIntent(this@MainActivity,it.text))
-                        is ViewModelMainActivity.UiState.Error -> binding.tvToken?.text = it.error
+                        is ViewModelMainActivity.UiState.Error -> {}
                         else -> Unit
 
                     }

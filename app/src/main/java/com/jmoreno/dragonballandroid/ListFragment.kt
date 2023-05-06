@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jmoreno.dragonballandroid.databinding.FragmentListBinding
 import kotlinx.coroutines.launch
 
-class ListFragment: Fragment() {
+class ListFragment: Fragment() , OnClicked{
 
     private lateinit var binding: FragmentListBinding
     private val activityViewModel: SecondActivityViewModel by activityViewModels()
@@ -23,6 +23,9 @@ class ListFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentListBinding.inflate(inflater)
+        /*binding.tvTitle.setOnClickListener {
+            showHero()
+        }*/
         return binding.root
     }
 
@@ -30,14 +33,30 @@ class ListFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            activityViewModel.uiState.collect{
-                val listaPersonajes = activityViewModel.listaPersonajes.toMutableList()
-                val adapter = ListHeroesAdapter(listaPersonajes,callback)
-                binding.rvListaHeroes.layoutManager = LinearLayoutManager(binding.root.context)
-                binding.rvListaHeroes.adapter = adapter
+            activityViewModel.uiListState.collect{
+                when (it) {
+                    SecondActivityViewModel.UiListState.Empty -> {}
+                    is SecondActivityViewModel.UiListState.Error -> {} // Mostrar un mensaje de error
+                    SecondActivityViewModel.UiListState.Idle -> {} // Mostrar el loading (si tienes)
+                    is SecondActivityViewModel.UiListState.OnHeroReceived -> {
+                        showHero(it.personaje)
+                    } // Abrir el otro fragment
+                    is SecondActivityViewModel.UiListState.OnListReceived -> {
+                        val listaPersonajes = it.heroeList
+                        val adapter = ListHeroesAdapter(listaPersonajes,callback,this@ListFragment)
+                        binding.rvListaHeroes.layoutManager = LinearLayoutManager(binding.root.context)
+                        binding.rvListaHeroes.adapter = adapter
+                    }
+                }
             }
         }
-        }
+    }
+
+     override  fun showHero(hero:Personaje) {
+        //val hero = Personaje(false, "Ejemplo", "1234", "", "",100, 100)
+        activityViewModel.changeDetail(hero)
+        parentFragmentManager.beginTransaction().replace(R.id.fFragmentList, HeroeFragment()).commit()
+    }
 
 }
 

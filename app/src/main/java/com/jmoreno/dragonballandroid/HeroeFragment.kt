@@ -1,16 +1,14 @@
 package com.jmoreno.dragonballandroid
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
 import com.jmoreno.dragonballandroid.databinding.FightingHeroeBinding
 import com.squareup.picasso.Picasso
 
@@ -21,8 +19,8 @@ class HeroeFragment() : Fragment() {
 
     private lateinit var binding: FightingHeroeBinding
 
-    val activityViewModel: SecondActivityViewModel by activityViewModels()
-    var personaje = Personaje(true,"","","","",100,100)
+    private val activityViewModel: SecondActivityViewModel by activityViewModels()
+    private var personaje = Personaje(false,"","","","",100,100)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,33 +30,88 @@ class HeroeFragment() : Fragment() {
         binding = FightingHeroeBinding.inflate(inflater)
         return binding.root
     }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            returnToList()
+        }
+    }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
 
-            activityViewModel.detailState.collect{
-                when(it){
-
-                        is SecondActivityViewModel.UiState.OnHeroReceived ->
-
+                activityViewModel.uiListState.collect {
+                    when (it) {
+                        is SecondActivityViewModel.UiListState.OnHeroReceived -> {
                             personaje = it.personaje
+                            showHero(it.personaje)
 
-                        //is ViewModelMainActivity.UiState.Error -> binding.tvToken?.text = it.error
+                            binding.bHerir.setOnClickListener {
+                                reducirVida()
+                            }
+                            binding.bCurar.setOnClickListener {
+                                curarVida()
+                            }
+                         }
                         else -> Unit
-
-
+                    }
                 }
-                binding.tvName.text = personaje.name
-                binding.tvVidaActual.text = personaje.vidaActual.toString()
-                Picasso.get().load(personaje.photo)
-                .into(binding.ivPersonaje)
             }
         }
 
+    private fun showHero(personaje: Personaje) {
+        binding.tvName.text = personaje.name
+        binding.tvVidaActual.text = "Vida actual:"
+        binding.tvNumeroVida.text = personaje.vidaActual.toString()
 
-
+        if (personaje.photo.isNotEmpty())
+            Picasso.get().load(personaje.photo)
+                .into(binding.ivPersonaje)
+        }
+    private fun updateBar() {
+        binding.tvNumeroVida.text = (personaje.vidaActual).toString()
+        binding.progressBar.progress = personaje.vidaActual
     }
+    private fun returnToList() {
+        activityViewModel.showList()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fFragmentList, ListFragment()).commit()
+        }
+    private fun reducirVida() {
+        if (personaje.vidaActual in 0..25) {
+            personaje.vidaActual = 0
+            updateBar()
+            returnToList()
+            Toast.makeText(
+                binding.root.context,
+                "¡${personaje.name} ha perdido la batalla!",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            personaje.vidaActual = personaje.vidaActual - 25
+            updateBar()
+        }
+    }
+    private fun curarVida(){
+        if (personaje.vidaActual in 80..99) {
+            personaje.vidaActual = 100
+            updateBar()
 
+        } else if (personaje.vidaActual<80){
+            personaje.vidaActual = personaje.vidaActual + 20
+            updateBar()
+
+        }else{
+            Toast.makeText(
+                binding.root.context,
+                "¡${personaje.name} tiene la vida máxima!",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 }
