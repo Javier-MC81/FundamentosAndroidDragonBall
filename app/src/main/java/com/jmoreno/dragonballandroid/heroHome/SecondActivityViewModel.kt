@@ -1,8 +1,10 @@
-package com.jmoreno.dragonballandroid
+package com.jmoreno.dragonballandroid.heroHome
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.jmoreno.dragonballandroid.models.Personaje
+import com.jmoreno.dragonballandroid.models.PersonajeDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,12 +15,18 @@ import okhttp3.Request
 
 class SecondActivityViewModel: ViewModel() {
 
-    private val _uiListState = MutableStateFlow<SecondActivityViewModel.UiListState>(SecondActivityViewModel.UiListState.Idle)
-    val uiListState : StateFlow<SecondActivityViewModel.UiListState> = _uiListState
+    private val _uiListState = MutableStateFlow<UiListState>(UiListState.Idle)
+    val uiListState : StateFlow<UiListState> = _uiListState
     private var listaPersonajes: List<Personaje> = listOf()
 
     fun changeDetail(personaje: Personaje) {
-        _uiListState.value = UiListState.OnHeroReceived(personaje)
+        if (personaje.vidaActual == 0) {
+            _uiListState.value = UiListState.OnHeroDead(personaje)
+
+        }else{
+            _uiListState.value = UiListState.OnHeroReceived(personaje)
+        }
+
     }
     fun showList() {
         _uiListState.value = UiListState.OnListReceived(listaPersonajes)
@@ -43,13 +51,14 @@ class SecondActivityViewModel: ViewModel() {
                 val gson = Gson()
                 try {
                     val personajeDtoArray = gson.fromJson(responseBody.string(), Array<PersonajeDTO>::class.java)
-                    //_uiState.value = UiState.OnListReceived(personajeDtoArray.toList().map { PersonajeDTO(it.favorite,it.name,it.id,it.photo,it.description) })
                     listaPersonajes = personajeDtoArray.toList().map { Personaje(it.favorite,it.name,it.id,it.photo,it.description, vidaMaxima = 100, vidaActual = 100) }
                     _uiListState.value = UiListState.OnListReceived(listaPersonajes)
                 } catch(ex: Exception ) {
                     _uiListState.value = UiListState.Error("Something went wrong in the response")
                 }
-            } ?: run { _uiListState.value = UiListState.Error("Something went wrong in the request") }
+            } ?: run { _uiListState.value =
+                UiListState.Error("Something went wrong in the request")
+            }
         }
     }
     sealed class UiListState {
@@ -58,12 +67,24 @@ class SecondActivityViewModel: ViewModel() {
         data class Error(val error: String) : UiListState()
         data class OnListReceived(val heroeList: List<Personaje>) : UiListState()
         data class OnHeroReceived(val personaje: Personaje): UiListState()
+        data class OnHeroDead(val personaje: Personaje): UiListState()
     }
 
+    fun reducirVida(personaje: Personaje) {
+        personaje.vidaActual = personaje.vidaActual - (10..60).random()
+        if (personaje.vidaActual <= 0) {
 
-    sealed class UiHeroState {
-        object Idle : UiHeroState()
+            personaje.vidaActual = 0
+            showList()
 
-        data class OnHeroReceived(val personaje: Personaje): UiHeroState()
+        }
+    }
+    fun curarVida(personaje: Personaje){
+        if (personaje.vidaActual in 80..100) {
+            personaje.vidaActual = 100
+        } else {
+            personaje.vidaActual = personaje.vidaActual + 20
+        }
+
     }
 }

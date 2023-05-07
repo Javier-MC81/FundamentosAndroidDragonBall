@@ -1,6 +1,7 @@
 package com.jmoreno.dragonballandroid
 
-import com.google.gson.Gson
+import com.jmoreno.dragonballandroid.heroHome.SecondActivityViewModel
+import com.jmoreno.dragonballandroid.models.Personaje
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -47,14 +48,17 @@ class SecondActivityViewModelTest {
                         cancel()
                     }
                     is SecondActivityViewModel.UiListState.OnHeroReceived -> {
-                         assertNotNull(it.personaje.name)
+                        assertNotNull(it.personaje)
+                        cancel()
                     }
-
+                    is SecondActivityViewModel.UiListState.OnHeroDead -> {
+                        assertNotNull(it.personaje)
+                        assertEquals(it.personaje.vidaActual,0)
+                        cancel()
+                    }
                 }
             }
         }
-
         viewModel.downloadListOfHeroes(token)
-
     }
 }

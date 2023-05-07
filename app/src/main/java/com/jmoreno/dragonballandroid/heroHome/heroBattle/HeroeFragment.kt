@@ -1,15 +1,18 @@
-package com.jmoreno.dragonballandroid
+package com.jmoreno.dragonballandroid.heroHome.heroBattle
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.jmoreno.dragonballandroid.models.Personaje
+import com.jmoreno.dragonballandroid.R
 import com.jmoreno.dragonballandroid.databinding.FightingHeroeBinding
+import com.jmoreno.dragonballandroid.heroHome.SecondActivityViewModel
+import com.jmoreno.dragonballandroid.heroHome.list.ListFragment
 import com.squareup.picasso.Picasso
 
 
@@ -21,6 +24,7 @@ class HeroeFragment() : Fragment() {
 
     private val activityViewModel: SecondActivityViewModel by activityViewModels()
     private var personaje = Personaje(false,"","","","",100,100)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,16 +54,28 @@ class HeroeFragment() : Fragment() {
                         is SecondActivityViewModel.UiListState.OnHeroReceived -> {
                             personaje = it.personaje
                             showHero(it.personaje)
-
+                            updateBar()
                             binding.bHerir.setOnClickListener {
-                                reducirVida()
+
+                                activityViewModel.reducirVida(personaje)
+                                updateBar()
                             }
                             binding.bCurar.setOnClickListener {
-                                curarVida()
+
+                                activityViewModel.curarVida(personaje)
+                                updateBar()
                             }
+
                          }
+                        is SecondActivityViewModel.UiListState.OnHeroDead -> {
+                            parentFragmentManager.beginTransaction().replace(R.id.fFragmentList, ListFragment()).commit()
+                        }
+                        is SecondActivityViewModel.UiListState.OnListReceived -> {
+                            parentFragmentManager.beginTransaction().replace(R.id.fFragmentList, ListFragment()).commit()
+                        }
                         else -> Unit
                     }
+
                 }
             }
         }
@@ -78,40 +94,10 @@ class HeroeFragment() : Fragment() {
         binding.progressBar.progress = personaje.vidaActual
     }
     private fun returnToList() {
+        activityViewModel.changeDetail(personaje)
         activityViewModel.showList()
         parentFragmentManager.beginTransaction()
             .replace(R.id.fFragmentList, ListFragment()).commit()
         }
-    private fun reducirVida() {
-        if (personaje.vidaActual in 0..25) {
-            personaje.vidaActual = 0
-            updateBar()
-            returnToList()
-            Toast.makeText(
-                binding.root.context,
-                "¡${personaje.name} ha perdido la batalla!",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            personaje.vidaActual = personaje.vidaActual - 25
-            updateBar()
-        }
-    }
-    private fun curarVida(){
-        if (personaje.vidaActual in 80..99) {
-            personaje.vidaActual = 100
-            updateBar()
 
-        } else if (personaje.vidaActual<80){
-            personaje.vidaActual = personaje.vidaActual + 20
-            updateBar()
-
-        }else{
-            Toast.makeText(
-                binding.root.context,
-                "¡${personaje.name} tiene la vida máxima!",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
 }

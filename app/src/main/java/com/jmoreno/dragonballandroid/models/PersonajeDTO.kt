@@ -1,4 +1,4 @@
-package com.jmoreno.dragonballandroid
+package com.jmoreno.dragonballandroid.models
 
 data class PersonajeDTO (
     var favorite: Boolean ,

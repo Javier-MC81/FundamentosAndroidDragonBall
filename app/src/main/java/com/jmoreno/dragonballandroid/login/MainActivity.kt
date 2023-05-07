@@ -1,18 +1,14 @@
-package com.jmoreno.dragonballandroid
+package com.jmoreno.dragonballandroid.login
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.jmoreno.dragonballandroid.heroHome.SecondActivity
 import com.jmoreno.dragonballandroid.databinding.ActivityMainBinding
 
 
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 

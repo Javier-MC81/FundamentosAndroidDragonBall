@@ -1,4 +1,4 @@
-package com.jmoreno.dragonballandroid
+package com.jmoreno.dragonballandroid.models
 
 import kotlinx.coroutines.flow.StateFlow
 

@@ -1,4 +1,4 @@
-package com.jmoreno.dragonballandroid
+package com.jmoreno.dragonballandroid.heroHome
 
 import android.content.Context
 import android.content.Intent
@@ -6,12 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import com.jmoreno.dragonballandroid.databinding.ActivityMainBinding
+import com.jmoreno.dragonballandroid.heroHome.heroBattle.HeroeFragment
+import com.jmoreno.dragonballandroid.heroHome.list.ListFragment
+import com.jmoreno.dragonballandroid.models.Personaje
+import com.jmoreno.dragonballandroid.PersonajeClicked
 import com.jmoreno.dragonballandroid.databinding.ActivitySecondBinding
-import kotlinx.coroutines.launch
 
-class SecondActivity : AppCompatActivity(),PersonajeClicked{
+class SecondActivity : AppCompatActivity(), PersonajeClicked {
 
     private lateinit var binding : ActivitySecondBinding
     companion object {
@@ -36,7 +37,7 @@ class SecondActivity : AppCompatActivity(),PersonajeClicked{
         return intent
 
     }
-    private fun addFragment(fragment: Fragment) {
+    fun addFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(binding.fFragmentList.id,fragment)
