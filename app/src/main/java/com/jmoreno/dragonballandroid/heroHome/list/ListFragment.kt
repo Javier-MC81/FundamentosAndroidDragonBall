@@ -39,9 +39,8 @@ class ListFragment: Fragment() , OnClicked {
         viewLifecycleOwner.lifecycleScope.launch {
             activityViewModel.uiListState.collect{
                 when (it) {
-                    //SecondActivityViewModel.UiListState.Empty -> {}
-                    is SecondActivityViewModel.UiListState.Error -> {} // Mostrar un mensaje de error
-                    is SecondActivityViewModel.UiListState.Idle -> {} // Mostrar el loading (si tienes)
+                    is SecondActivityViewModel.UiListState.Error -> {}
+                    is SecondActivityViewModel.UiListState.Idle -> {}
                     is SecondActivityViewModel.UiListState.OnListReceived -> {
                         val listaPersonajes = it.heroeList
                         val adapter = ListHeroesAdapter(listaPersonajes,callback,this@ListFragment)
@@ -57,8 +56,8 @@ class ListFragment: Fragment() , OnClicked {
         }
     }
     }
+    //Avisa del cambio al StateFlow y lanza el fragment del heroe seleccionado
      override  fun showHero(hero: Personaje) {
-        //val hero = Personaje(false, "Ejemplo", "1234", "", "",100, 100)
         activityViewModel.changeDetail(hero)
         parentFragmentManager.beginTransaction().replace(R.id.fFragmentList, HeroeFragment()).commit()
     }

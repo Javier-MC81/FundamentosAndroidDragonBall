@@ -30,19 +30,20 @@ class ListHeroesAdapter(
                 .into(item.ivPersonaje)
             item.tvName.text = personaje.name
             item.tvNumeroVida.text = personaje.vidaActual.toString()
+            //habilitamos o deshabilitamos el botón en función de la vida que tenga el heroe
             if(personaje.vidaActual != 0){
                     item.bLuchar.isEnabled = true
-            }else {
+            }else {//Si está muerto, lo deshabilitamos
                 item.bLuchar.isEnabled = false
                 item.bLuchar.text = "Personaje Eliminado"
-            }
+            }//Si está habilitado, lanzamos el fragment del heroe
             if (item.bLuchar.isEnabled){
                 item.bLuchar.setOnClickListener {
 
                     fragParent.showHero(personaje)
 
                 }
-            }else {
+            }else {//Si está muerto, aparece un mensaje de aviso.
                 item.ipBackground.setOnClickListener {
                     Toast.makeText(item.root.context, "Lo sentimos. ${personaje.name} ha perdido todas sus batallas", Toast.LENGTH_LONG).show()
                 }
@@ -68,7 +69,4 @@ class ListHeroesAdapter(
     override fun onBindViewHolder(holder: MainActivityViewHolder, position: Int) {
         holder.showPersonaje(listaPersonajes[position])
     }
-
-
-
 }

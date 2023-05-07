@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding.bLogin?.setOnClickListener {
             val user = binding.etUser?.text.toString()
             val password = binding.etPassword?.text.toString()
+            //Escuchamos el cambio del StateFlow para que cuando se reciba un token, haga el cambio de actividad
             lifecycleScope.launch {
                 viewModel.login(user, password)
                 viewModel.uiState.collect{

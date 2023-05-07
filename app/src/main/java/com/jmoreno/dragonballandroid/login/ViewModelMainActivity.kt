@@ -20,8 +20,8 @@ class ViewModelMainActivity: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val client = OkHttpClient()
             val url = "https://dragonball.keepcoding.education/api/auth/login"
-            //val credential = Credentials.basic("$user", "$pass")
-            val credential = Credentials.basic("jmorenocarrero@hotmail.com", "Realmadrid14")
+            val credential = Credentials.basic("$user", "$pass")
+            //val credential = Credentials.basic("jmorenocarrero@hotmail.com", "Realmadrid14")
             val body = FormBody.Builder()
                 .build()
             val request = Request.Builder()
@@ -31,7 +31,7 @@ class ViewModelMainActivity: ViewModel() {
                 .build()
             val call = client.newCall(request)
             val response = call.execute()
-
+            //Recogemos la respuesta y la utilizamos para cambiar el estado del StateFlow y que la actividad reaccione
             response.body?.let { responseBody ->
                 _uiState.value = UiState.OnTokenReceived(responseBody.string())
             } ?: run { _uiState.value = UiState.Error("Something went wrong in the request") }

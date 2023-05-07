@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="Name"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/bLuchar"
         app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toEndOf="@+id/ivPersonaje"
@@ -50,6 +51,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginBottom="5dp"
         android:text="Vida actual:"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivPersonaje"
         app:layout_constraintTop_toBottomOf="@+id/tvName" />
@@ -62,6 +64,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginBottom="5dp"
         android:text="Número"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvVidaActual"

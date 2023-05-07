@@ -48,7 +48,7 @@ class HeroeFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
             viewLifecycleOwner.lifecycleScope.launch {
-
+                //Escuchamos el cambio del StateFlow para que cuando se pueda jugar con los botones y actualizar la UI
                 activityViewModel.uiListState.collect {
                     when (it) {
                         is SecondActivityViewModel.UiListState.OnHeroReceived -> {
@@ -67,6 +67,7 @@ class HeroeFragment() : Fragment() {
                             }
 
                          }
+                        //Si el cambio del StatefLow avisa de que el heroe está muerto, lanza la lista
                         is SecondActivityViewModel.UiListState.OnHeroDead -> {
                             parentFragmentManager.beginTransaction().replace(R.id.fFragmentList, ListFragment()).commit()
                         }
@@ -79,7 +80,7 @@ class HeroeFragment() : Fragment() {
                 }
             }
         }
-
+    //Funciones para pintar el fragment del héroe seleccionado
     private fun showHero(personaje: Personaje) {
         binding.tvName.text = personaje.name
         binding.tvVidaActual.text = "Vida actual:"
@@ -93,6 +94,7 @@ class HeroeFragment() : Fragment() {
         binding.tvNumeroVida.text = (personaje.vidaActual).toString()
         binding.progressBar.progress = personaje.vidaActual
     }
+    //Función para volver con el botón de back hacia la lista.
     private fun returnToList() {
         activityViewModel.changeDetail(personaje)
         activityViewModel.showList()

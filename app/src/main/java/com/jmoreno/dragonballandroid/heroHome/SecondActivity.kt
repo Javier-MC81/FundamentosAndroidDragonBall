@@ -37,16 +37,13 @@ class SecondActivity : AppCompatActivity(), PersonajeClicked {
         return intent
 
     }
-    fun addFragment(fragment: Fragment) {
+    private fun addFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(binding.fFragmentList.id,fragment)
             .commitNow()
     }
     override fun personajeClicked(personaje: Personaje) {
-
-        viewModel.changeDetail(personaje)
-        addFragment(HeroeFragment())
 
     }
 }

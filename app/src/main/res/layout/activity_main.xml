@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".login.MainActivity"
-    android:background="@mipmap/fondo2">
+    android:background="@mipmap/fondo2"
+    >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title"
-        android:fontFamily="@font/mustachio"
+        android:textStyle="bold"
         android:textColor="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,16 +27,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Usuario"
-        android:backgroundTint="@color/white"
-        android:layout_margin="10dp"/>
+        android:layout_margin="30dp"
+        android:background="@color/white"
+        />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:backgroundTint="@color/white"
+        android:layout_margin="30dp"
         android:hint="Contraseña"
+        android:background="@color/white"
         android:password="true" />
 
     <Button
@@ -43,7 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"
-        android:layout_margin="10dp"/>
+        android:layout_margin="30dp"
+        />
 
 
 </LinearLayout>
