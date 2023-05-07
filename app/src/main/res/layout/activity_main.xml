@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:text="@string/title"
         android:fontFamily="@font/mustachio"
-
         android:textColor="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +25,7 @@
         android:id="@+id/etUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Usuario"
+        android:hint="Usuario"
         android:backgroundTint="@color/white"
         android:layout_margin="10dp"/>
 
@@ -34,9 +33,10 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Contraseña"
+        android:layout_margin="10dp"
         android:backgroundTint="@color/white"
-        android:layout_margin="10dp"/>
+        android:hint="Contraseña"
+        android:password="true" />
 
     <Button
         android:id="@+id/bLogin"

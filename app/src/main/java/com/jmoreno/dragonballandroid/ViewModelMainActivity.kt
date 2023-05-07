@@ -26,6 +26,7 @@ class ViewModelMainActivity: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val client = OkHttpClient()
             val url = "https://dragonball.keepcoding.education/api/auth/login"
+            //val credential = Credentials.basic("$user", "$pass")
             val credential = Credentials.basic("jmorenocarrero@hotmail.com", "Realmadrid14")
             val body = FormBody.Builder()
                 .build()

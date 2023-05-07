@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-        //Picasso.get().load("https://cdn.alfabetajuega.com/alfabetajuega/2020/12/goku1.jpg?width=300").into(binding.imageView);
+
     }
 }
 

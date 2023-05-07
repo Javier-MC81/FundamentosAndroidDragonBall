@@ -35,7 +35,7 @@ class ListFragment: Fragment() , OnClicked{
         viewLifecycleOwner.lifecycleScope.launch {
             activityViewModel.uiListState.collect{
                 when (it) {
-                    SecondActivityViewModel.UiListState.Empty -> {}
+                    //SecondActivityViewModel.UiListState.Empty -> {}
                     is SecondActivityViewModel.UiListState.Error -> {} // Mostrar un mensaje de error
                     SecondActivityViewModel.UiListState.Idle -> {} // Mostrar el loading (si tienes)
                     is SecondActivityViewModel.UiListState.OnHeroReceived -> {

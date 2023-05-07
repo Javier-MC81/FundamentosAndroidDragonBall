@@ -25,7 +25,7 @@ class SecondActivity : AppCompatActivity(),PersonajeClicked{
         binding = ActivitySecondBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val token = intent.getStringExtra("TOKEN")
-        //binding.textView3.text = token.toString()
+
         viewModel.downloadListOfHeroes(token.toString())// Hago la llamada
         addFragment(ListFragment())//Añado el fragment para la lista de heroes
     }

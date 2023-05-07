@@ -15,7 +15,7 @@ class SecondActivityViewModel: ViewModel() {
 
     private val _uiListState = MutableStateFlow<SecondActivityViewModel.UiListState>(SecondActivityViewModel.UiListState.Idle)
     val uiListState : StateFlow<SecondActivityViewModel.UiListState> = _uiListState
-    var listaPersonajes: List<Personaje> = listOf()
+    private var listaPersonajes: List<Personaje> = listOf()
 
     fun changeDetail(personaje: Personaje) {
         _uiListState.value = UiListState.OnHeroReceived(personaje)
@@ -54,7 +54,7 @@ class SecondActivityViewModel: ViewModel() {
     }
     sealed class UiListState {
         object Idle : UiListState()
-        object Empty: UiListState()
+        //object Empty: UiListState()
         data class Error(val error: String) : UiListState()
         data class OnListReceived(val heroeList: List<Personaje>) : UiListState()
         data class OnHeroReceived(val personaje: Personaje): UiListState()
